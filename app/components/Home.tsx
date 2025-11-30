@@ -71,11 +71,6 @@ export default function Home() {
                 {selectedProduct && (
                     <BuyProductModalComp
                         selected={selectedProduct}
-                        onChange={(field, value) => {
-                            setSelectedProduct((prev) => 
-                                prev ? { ...prev, [field]: value } : null
-                            );
-                        }}
                         onAddToCart={handleAddToCart}
                     />
                 )}
