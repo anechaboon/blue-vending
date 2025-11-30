@@ -16,9 +16,6 @@ export default function Navbar() {
                         <Link href="/" className="text-gray-600 hover:text-gray-900 transition duration-200">
                             Home
                         </Link>
-                        <Link href="/attractions" className="text-gray-600 hover:text-gray-900 transition duration-200">
-                            Attractions
-                        </Link>
                     </div>
                     <ThemeToggle />
                 </div>

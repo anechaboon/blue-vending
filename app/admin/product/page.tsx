@@ -2,44 +2,44 @@
 
 import { useState, useEffect } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { getAttractionList } from '@/app/components/Attractions';
+import { getProductList } from '@/app/components/Products';
 import CommonModal from '@/app/components/CommonModal';
-import EditAttractionModalComp from '@/app/components/EditAttractionModalComp';
+import EditProductModalComp from '@/app/components/EditProductModalComp';
 import { apiFetch } from '@/services/api';
 import Swal from 'sweetalert2';
 
-export interface Attraction {
+export interface Product {
   id: number | string;
-  name: string;
-  location: string;
-  description: string;
-  cover_image: string | File;
+  title: string;
+  stock: string;
+  price: string;
+  image: string | File;
 }
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export default function AttractionsAdminPage() {
-  const [data, setData] = useState<Attraction[]>([]);
+export default function ProductsAdminPage() {
+  const [data, setData] = useState<Product[]>([]);
   const [openEditModal, setOpenEditModal] = useState(false);
-  const [selectedAttraction, setSelectedAttraction] =
-    useState<Attraction | null>(null);
+  const [selectedProduct, setSelectedProduct] =
+    useState<Product | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const attractions = await getAttractionList();
-      setData(attractions);
+      const products = await getProductList();
+      setData(products);
     };
     fetchData();
   }, []);
 
-  const handleEdit = (row: Attraction) => {
-    setSelectedAttraction(row);
+  const handleEdit = (row: Product) => {
+    setSelectedProduct(row);
     setOpenEditModal(true);
   };
 
-  const handleDelete = (row: Attraction) => {
+  const handleDelete = (row: Product) => {
     Swal.fire({
       title: 'Are you sure?',
-      text: `Do you want to delete attraction "${row.name}"?`,
+      text: `Do you want to delete product "${row.title}"?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
@@ -49,20 +49,20 @@ export default function AttractionsAdminPage() {
       if (result.isConfirmed) {
         try {
           const res = await apiFetch(
-            `${BASE_URL}/api/attractions/${row.id}`,
+            `${BASE_URL}/product/${row.id}`,
             {
               method: 'DELETE',
             }
           );
 
           if (!res.status) {
-            Swal.fire('Error', 'Failed to delete attraction', 'error');
+            Swal.fire('Error', 'Failed to delete product', 'error');
             return;
           }
 
-          Swal.fire('Deleted!', 'Attraction has been deleted.', 'success').then(() => {
+          Swal.fire('Deleted!', 'Product has been deleted.', 'success').then(() => {
             // Refresh data
-            getAttractionList().then((attractions) => setData(attractions));
+            getProductList().then((products) => setData(products));
           });
         } catch (err) {
           console.log('Error:', err);
@@ -71,43 +71,43 @@ export default function AttractionsAdminPage() {
     });
   };
 
-  async function handleSaveAttraction() {
-    if (!selectedAttraction) return;
+  async function handleSaveProduct() {
+    if (!selectedProduct) return;
 
     try {
       const formData = new FormData();
-      formData.append('name', selectedAttraction.name);
-      formData.append('description', selectedAttraction.description);
-      formData.append('location', selectedAttraction.location);
-      if (selectedAttraction.cover_image instanceof File) {
-        formData.append('cover_image', selectedAttraction.cover_image);
+      formData.append('title', selectedProduct.title);
+      formData.append('price', selectedProduct.price);
+      formData.append('stock', selectedProduct.stock);
+      if (selectedProduct.image instanceof File) {
+        formData.append('image', selectedProduct.image);
       }
 
       let res, msgSuccess, msgError;
 
-      if( selectedAttraction.id === '') {
-        // New attraction
+      if( selectedProduct.id === '') {
+        // New product
         res =  await apiFetch(
-          `${BASE_URL}/api/attractions`,
+          `${BASE_URL}/product`,
           {
             method: 'POST',
             body: formData,
           }
         );
-        msgSuccess = 'Attraction created successfully';
-        msgError = 'Failed to create attraction';
+        msgSuccess = 'Product created successfully';
+        msgError = 'Failed to create product';
         
       }else{
-        // Update existing attraction
+        // Update existing product
         res = await apiFetch(
-          `${BASE_URL}/api/attractions/${selectedAttraction.id}`,
+          `${BASE_URL}/product/${selectedProduct.id}`,
           {
             method: 'PUT',
             body: formData,
           }
         );
-        msgSuccess = 'Attraction updated successfully';
-        msgError = 'Failed to update attraction';
+        msgSuccess = 'Product updated successfully';
+        msgError = 'Failed to update product';
         
       }
       if (!res.status) {
@@ -116,7 +116,7 @@ export default function AttractionsAdminPage() {
       }
       Swal.fire('Success', msgSuccess, 'success').then(() => {
         // Refresh data
-        getAttractionList().then((attractions) => setData(attractions));
+        getProductList().then((products) => setData(products));
       });
 
       setOpenEditModal(false);
@@ -128,9 +128,9 @@ export default function AttractionsAdminPage() {
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 80 },
-    { field: 'name', headerName: 'Name', flex: 1 },
-    { field: 'location', headerName: 'Location', flex: 1 },
-    { field: 'description', headerName: 'Description', flex: 2 },
+    { field: 'title', headerName: 'Title', flex: 1 },
+    { field: 'stock', headerName: 'Stock', width: 120 },
+    { field: 'price', headerName: 'Price', width: 150 },
     {
       field: 'action',
       headerName: 'Action',
@@ -150,7 +150,7 @@ export default function AttractionsAdminPage() {
             className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
             onClick={(e) => {
               e.stopPropagation();
-              handleEdit(params.row as Attraction);
+              handleEdit(params.row as Product);
             }}
           >
             Edit
@@ -160,7 +160,7 @@ export default function AttractionsAdminPage() {
             className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
             onClick={(e) => {
               e.stopPropagation();
-              handleDelete(params.row as Attraction);
+              handleDelete(params.row as Product);
             }}
           >
             Delete
@@ -174,23 +174,23 @@ export default function AttractionsAdminPage() {
     <div className="p-4">
       <div className="grid grid-cols-12 gap-4 items-center">
         <div className="col-span-10">
-            <h1 className="text-2xl font-bold mb-4">Attractions Management</h1>
+            <h1 className="text-2xl font-bold mb-4">Products Management</h1>
         </div>
 
         <div className="col-span-2">
             <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" 
               onClick={() => {
-                setSelectedAttraction({
+                setSelectedProduct({
                   id: '',
-                  name: '',
-                  location: '',
-                  description: '',
-                  cover_image: '',
+                  title: '',
+                  stock: '',
+                  price: '',
+                  image: '',
                 });
                 setOpenEditModal(true);
               }}
             >
-                Add Attraction
+                Add Product
             </button>
         </div>
     </div>
@@ -223,18 +223,18 @@ export default function AttractionsAdminPage() {
             </button>
             <button
               className="px-4 py-2 bg-blue-600 text-white rounded"
-              onClick={handleSaveAttraction}
+              onClick={handleSaveProduct}
             >
               Save
             </button>
           </div>
         }
       >
-        {selectedAttraction && (
-          <EditAttractionModalComp
-            selected={selectedAttraction}
+        {selectedProduct && (
+          <EditProductModalComp
+            selected={selectedProduct}
             onChange={(field, value) =>
-              setSelectedAttraction((prev) =>
+              setSelectedProduct((prev) =>
                 prev ? { ...prev, [field]: value } : prev
               )
             }

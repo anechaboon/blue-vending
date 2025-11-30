@@ -7,7 +7,8 @@ export default function AdminSideMenu() {
             <Menu>
                 <MenuItem href="/admin">Dashboard</MenuItem>
                 <SubMenu label="Management">
-                    <MenuItem className="bg-gray-800 text-white hover:text-black" href="/admin/attractions">Attractions</MenuItem>
+                    <MenuItem className="bg-gray-800 text-white hover:text-black" href="/admin/cash">Cash</MenuItem>
+                    <MenuItem className="bg-gray-800 text-white hover:text-black" href="/admin/product">Product</MenuItem>
                 </SubMenu>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
