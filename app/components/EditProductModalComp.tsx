@@ -1,5 +1,4 @@
-import { Product } from '@/app/admin/product/page';
-
+import { Product } from '@/app/interface/Product';
 interface Props {
   selected: Product;
   onChange: (

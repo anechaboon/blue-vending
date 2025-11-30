@@ -2,20 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { getProductList } from '@/app/components/Products';
+import { getProducts, deleteProduct, createProduct, updateProduct } from '@/services/product';
 import CommonModal from '@/app/components/CommonModal';
 import EditProductModalComp from '@/app/components/EditProductModalComp';
-import { apiFetch } from '@/services/api';
 import Swal from 'sweetalert2';
+import { Product } from '@/app/interface/Product';
 
-export interface Product {
-  id: number | string;
-  title: string;
-  stock: string;
-  price: string;
-  image: string | File;
-}
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function ProductsAdminPage() {
   const [data, setData] = useState<Product[]>([]);
@@ -25,7 +17,7 @@ export default function ProductsAdminPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const products = await getProductList();
+      const products = await getProducts();
       setData(products);
     };
     fetchData();
@@ -48,13 +40,7 @@ export default function ProductsAdminPage() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await apiFetch(
-            `${BASE_URL}/product/${row.id}`,
-            {
-              method: 'DELETE',
-            }
-          );
-
+          const res = await deleteProduct(row.id);
           if (!res.status) {
             Swal.fire('Error', 'Failed to delete product', 'error');
             return;
@@ -62,7 +48,7 @@ export default function ProductsAdminPage() {
 
           Swal.fire('Deleted!', 'Product has been deleted.', 'success').then(() => {
             // Refresh data
-            getProductList().then((products) => setData(products));
+            getProducts().then((products) => setData(products));
           });
         } catch (err) {
           console.log('Error:', err);
@@ -87,25 +73,13 @@ export default function ProductsAdminPage() {
 
       if( selectedProduct.id === '') {
         // New product
-        res =  await apiFetch(
-          `${BASE_URL}/product`,
-          {
-            method: 'POST',
-            body: formData,
-          }
-        );
+        res = await createProduct(formData);
         msgSuccess = 'Product created successfully';
         msgError = 'Failed to create product';
         
       }else{
         // Update existing product
-        res = await apiFetch(
-          `${BASE_URL}/product/${selectedProduct.id}`,
-          {
-            method: 'PUT',
-            body: formData,
-          }
-        );
+        res = await updateProduct(selectedProduct.id, formData);
         msgSuccess = 'Product updated successfully';
         msgError = 'Failed to update product';
         
@@ -116,7 +90,7 @@ export default function ProductsAdminPage() {
       }
       Swal.fire('Success', msgSuccess, 'success').then(() => {
         // Refresh data
-        getProductList().then((products) => setData(products));
+        getProducts().then((products) => setData(products));
       });
 
       setOpenEditModal(false);
