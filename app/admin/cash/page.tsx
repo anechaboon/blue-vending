@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { getCashList } from '@/app/components/Cash';
+import { getCashes, createCash, updateCash, deleteCash } from '@/services/cash';
 import CommonModal from '@/app/components/CommonModal';
 import EditCashModalComp from '@/app/components/EditCashModalComp';
 import { apiFetch } from '@/services/api';
@@ -13,8 +13,8 @@ export interface Cash {
   cash_type: string;
   cash: number;
   stock: number;
+  is_active?: boolean;
 }
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function CashAdminPage() {
   const [data, setData] = useState<Cash[]>([]);
@@ -24,7 +24,7 @@ export default function CashAdminPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const cashes = await getCashList();
+      const cashes = await getCashes('?is_active=all');
       setData(cashes);
     };
     fetchData();
@@ -47,12 +47,7 @@ export default function CashAdminPage() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await apiFetch(
-            `${BASE_URL}/cash/${row.id}`,
-            {
-              method: 'DELETE',
-            }
-          );
+          const res = await deleteCash(Number(row.id));
 
           if (!res.status) {
             Swal.fire('Error', 'Failed to delete cash', 'error');
@@ -61,7 +56,7 @@ export default function CashAdminPage() {
 
           Swal.fire('Deleted!', 'Cash has been deleted.', 'success').then(() => {
             // Refresh data
-            getCashList().then((cashes) => setData(cashes));
+            getCashes('?is_active=all').then((cashes) => setData(cashes));
           });
         } catch (err) {
           console.log('Error:', err);
@@ -78,30 +73,19 @@ export default function CashAdminPage() {
       formData.append('cash_type', selectedCash.cash_type);
       formData.append('cash', selectedCash.cash.toString());
       formData.append('stock', selectedCash.stock.toString());
+      formData.append('is_active', (selectedCash.is_active ? 1 : 0).toString());
 
       let res, msgSuccess, msgError;
 
       if( selectedCash.id === '') {
         // New cash
-        res =  await apiFetch(
-          `${BASE_URL}/cash`,
-          {
-            method: 'POST',
-            body: formData,
-          }
-        );
+        res =  await createCash(formData);
         msgSuccess = 'Cash created successfully';
         msgError = 'Failed to create cash';
         
       }else{
         // Update existing cash
-        res = await apiFetch(
-          `${BASE_URL}/cash/${selectedCash.id}`,
-          {
-            method: 'PUT',
-            body: formData,
-          }
-        );
+        res = await updateCash(Number(selectedCash.id), formData);
         msgSuccess = 'Cash updated successfully';
         msgError = 'Failed to update cash';
         
@@ -112,7 +96,7 @@ export default function CashAdminPage() {
       }
       Swal.fire('Success', msgSuccess, 'success').then(() => {
         // Refresh data
-        getCashList().then((cashes) => setData(cashes));
+        getCashes('?is_active=all').then((cashes) => setData(cashes));
       });
 
       setOpenEditModal(false);

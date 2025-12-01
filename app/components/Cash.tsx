@@ -4,22 +4,10 @@ interface Cash {
   description: string;
   cover_image: string;
 }
+import { getCashes } from '@/services/cash';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-export async function getCashList() {
-  const res = await fetch(`${BASE_URL}/cash`);
-  // Next.js แคชข้อมูลนี้โดยอัตโนมัติ
-  if (!res.ok) {
-    throw new Error('Failed to fetch data');
-  }
-  const data = await res.json();
-  if (!data.status) {
-    throw new Error('Failed to fetch data');
-  }
-  return data.data;
-}
 export default async function Cash() {
-  const productList = await getCashList();
+  const productList = await getCashes();
   return (
     <main className="flex flex-col items-center min-h-screen p-1 pt-6">
       <h1 className="text-4xl font-bold mb-8">Welcome to the Cash</h1>

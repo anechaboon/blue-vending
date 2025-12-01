@@ -13,3 +13,44 @@ export async function getCashes(q: string = "") {
     const data = await res.json();
     return data.data;
 }
+
+export async function createCash(formData: FormData) {
+    const res = await fetch(`${BASE_URL}/cash`, {
+        method: "POST",
+        body: formData,
+    });
+
+    if (!res.ok) {
+        throw new Error("Failed to create cash");
+    }
+
+    const data = await res.json();
+    return data;
+}
+
+export async function updateCash(id: number, formData: FormData) {
+    const res = await fetch(`${BASE_URL}/cash/${id}`, {
+        method: "PUT",
+        body: formData,
+    });
+
+    if (!res.ok) {
+        throw new Error("Failed to update cash");
+    }
+
+    const data = await res.json();
+    return data;
+}
+
+export async function deleteCash(id: number) {
+    const res = await fetch(`${BASE_URL}/cash/${id}`, {
+        method: "DELETE",
+    });
+
+    if (!res.ok) {
+        throw new Error("Failed to delete cash");
+    }
+
+    const data = await res.json();
+    return data;
+}

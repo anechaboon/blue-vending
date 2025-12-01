@@ -70,7 +70,7 @@ export default function BuyProductModalComp({ selected, onAddToCart }: Props) {
 
                 <button
                     type="button"
-                    className="px-4 py-2 bg-green-500 text-white text-xl rounded"
+                    className="px-4 py-2 bg-green-600 text-white text-xl rounded"
                     onClick={() => handleUpdateQuantity(quantity + 1)}
 
                 >
@@ -89,7 +89,7 @@ export default function BuyProductModalComp({ selected, onAddToCart }: Props) {
             <div className="flex justify-center">
                 <button
                     type="button"
-                    className="mx-2 px-6 py-3 bg-gray-400 text-white rounded hover:bg-green-700"
+                    className="mx-2 px-6 py-3 bg-green-600 text-white rounded hover:bg-green-700"
                     onClick={() => onAddToCart(selected, quantity)}
                 >
                     Add To Cart

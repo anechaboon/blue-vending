@@ -17,12 +17,10 @@ export default function EditProductModalComp({ selected, onChange }: Props) {
         {/* Cash Type */}
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2">Cash Type</label>
-          <input
-            type="text"
-            className="w-full border border-gray-300 rounded px-3 py-2"
-            value={selected.cash_type}
-            onChange={(e) => onChange('cash_type', e.target.value)}
-          />
+          <select className="w-full border border-gray-300 rounded px-3 py-2" value={selected.cash_type} onChange={(e) => onChange('cash_type', e.target.value)}>
+            <option value="BILL">BILL</option>
+            <option value="COIN">COIN</option>
+          </select>
         </div>
 
         {/* Cash */}
@@ -50,6 +48,19 @@ export default function EditProductModalComp({ selected, onChange }: Props) {
             onBlur={(e) => e.target.removeEventListener('wheel', (ev) => ev.preventDefault())}
           />
         </div>
+
+        {/* Is Active */}
+        <div className="mb-4">
+          <label className="inline-flex items-center">
+            <input
+              type="checkbox"
+              className="form-checkbox"
+              checked={selected.is_active ?? false}
+              onChange={(e) => onChange('is_active', e.target.checked)}
+            />
+            <span className="ml-2">Is Active</span>
+          </label>
+        </div>  
 
       </form>
     </div>

@@ -43,7 +43,7 @@ export default function CartItemsModalComp({ cart, onUpdateQuantity }: { cart: P
                                     </button>
                                     <span className="text-gray-600">{item.qty}</span>
                                     <button
-                                        className="px-2 py-1 bg-green-500 text-white rounded ml-2 hover:cursor-pointer"
+                                        className="px-2 py-1 bg-green-600 text-white rounded ml-2 hover:cursor-pointer"
                                         onClick={() => onUpdateQuantity(Number(item.id), (item.qty ?? 0) + 1)}
                                     >
                                         +
