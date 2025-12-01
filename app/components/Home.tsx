@@ -19,8 +19,9 @@ export default function Home() {
     const [billReceived, setBillReceived] = React.useState<Record<string, number>>({});
     const [coinReceived, setCoinReceived] = React.useState<Record<string, number>>({});
     const [totalInserted, setTotalInserted] = React.useState<number>(0);
+    const totalAmount = cart.reduce((sum, item) => sum + (Number(item.price) * (item.qty ?? 0)), 0);
 
-    const handleAddToCart = (product: Product, quantity: number) => {
+    const handleAddToCart = (product: Product, quantity: number, buy_now: boolean = false) => {
         if (quantity <= 0) return;
         setCart(prev => {
             const exists = prev.find(p => p.id === product.id);
@@ -36,6 +37,15 @@ export default function Home() {
         });
 
         setOpenProductModal(false);
+        if (buy_now) {
+            setOpenCheckoutModal(true);
+        } else {
+            Swal.fire({
+                icon: 'success',
+                title: 'Added to Cart',
+                text: `Added ${quantity} of "${product.title}" to cart.`,
+            });
+        }
     };
 
     const handleCheckout = () => {
@@ -65,8 +75,8 @@ export default function Home() {
 
         const formData = new FormData();
         formData.append('product', JSON.stringify(res));
-        formData.append('bill', JSON.stringify(billReceived));
-        formData.append('coin', JSON.stringify(coinReceived));
+        formData.append('BILL', JSON.stringify(billReceived));
+        formData.append('COIN', JSON.stringify(coinReceived));
 
         purchase(formData).then((response) => {
             if (!response.status) {
@@ -88,13 +98,41 @@ export default function Home() {
         });
     }
 
+    const handleUpdateQuantity = (productId: number, newQuantity: number) => {
+        if (newQuantity === 0) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Item Removed',
+                text: 'The item has been removed from your cart.',
+                showConfirmButton: true,
+                showCancelButton: true,
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    setCart(prev => prev.filter(i => i.id !== productId));
+                }
+            });
+            return;
+        }
+        
+        setCart(prev => prev.map(item =>
+            item.id === productId ? { ...item, qty: newQuantity } : item
+        ));
+    };
+
+    const closePaymentModal = () => {
+        setOpenCheckoutModal(false);
+        setBillReceived({});
+        setCoinReceived({});
+        setTotalInserted(0);
+    }
+
     return (
-        <main className="flex flex-col items-center justify-center min-h-screen p-4">
+        <main className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-300">
 
             <div className="container">
                 <div className="flex flex-row items-center justify-center w-full mb-8">
                     <h1 className="text-4xl font-bold flex-1 text-center">Blue - Vending</h1>
-                    <h2 className="text-2xl font-semibold" onClick={() => setOpenCartModal(true)}>Cart Items: {cart.length}</h2>
+                    <h2 className="text-2xl font-semibold hover:cursor-pointer" onClick={() => setOpenCartModal(true)}>Cart Items: {cart.length}</h2>
                 </div>
             </div>
             
@@ -134,14 +172,15 @@ export default function Home() {
                 footer={
                 <div className="flex justify-between gap-3">
                     <button
-                        className="px-4 py-2 bg-gray-300 rounded"
+                        className="px-4 py-2 bg-gray-300 rounded hover:cursor-pointer"
                         onClick={() => setOpenCartModal(false)}
                     >
                         Close
                     </button>
 
                     <button
-                        className="px-4 py-2 bg-green-700 text-white rounded"
+                        className="px-4 py-2 bg-green-700 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed hover:cursor-pointer"
+                        disabled={cart.length === 0}
                         onClick={() => handleCheckout()}
                     >
                         Checkout
@@ -150,7 +189,7 @@ export default function Home() {
 
                 }
             >
-                <CartItemsModalComp cart={cart} />
+                <CartItemsModalComp cart={cart} onUpdateQuantity={handleUpdateQuantity}  />
             </CommonModal> 
 
             {/* Checkout Modal */}
@@ -158,19 +197,20 @@ export default function Home() {
                 title="Checkout"
                 width="600px"
                 open={openCheckoutModal}
-                onClose={() => setOpenCheckoutModal(false)}
+                onClose={() => closePaymentModal()}
                 footer={
                 <div className="flex justify-between gap-3">
                     <button
-                        className="px-4 py-2 bg-gray-300 rounded"
+                        className="px-4 py-2 bg-gray-300 rounded hover:cursor-pointer"
                         onClick={() => setOpenCheckoutModal(false)}
                     >
                         Close
                     </button>
 
                     <button
-                        className="px-4 py-2 bg-green-700 text-white rounded"
+                        className="px-4 py-2 bg-green-700 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed hover:cursor-pointer"
                         onClick={() => handleConfirmPayment()}
+                        disabled={totalInserted < totalAmount}
                     >
                         Confirm Payment
                     </button>
@@ -179,12 +219,14 @@ export default function Home() {
             >
                 <PaymentModalComp 
                     cart={cart}
+                    totalAmount={totalAmount}
                     billReceived={billReceived}
                     coinReceived={coinReceived}
                     setBillReceived={setBillReceived}
                     setCoinReceived={setCoinReceived}
                     totalInserted={totalInserted}
-                    setTotalInserted={setTotalInserted} />
+                    setTotalInserted={setTotalInserted}
+                    />
             </CommonModal> 
         </main>
     );

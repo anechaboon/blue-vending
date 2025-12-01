@@ -5,6 +5,7 @@ import React from 'react';
 import Swal from 'sweetalert2';
 export default function PaymentModalComp({
     cart,
+    totalAmount,
     billReceived,
     coinReceived,
     setBillReceived,
@@ -13,6 +14,7 @@ export default function PaymentModalComp({
     setTotalInserted
 }: {
     cart: Product[],
+    totalAmount: number,
     billReceived: Record<string, number>,
     coinReceived: Record<string, number>,
     setBillReceived: React.Dispatch<React.SetStateAction<Record<string, number>>>,
@@ -24,7 +26,6 @@ export default function PaymentModalComp({
     const [bills, setBills] = React.useState<Cash[]>([]);
     const [coins, setCoins] = React.useState<Cash[]>([]);
 
-    const totalAmount = cart.reduce((sum, item) => sum + (Number(item.price) * (item.qty ?? 0)), 0);
 
     const handleInsert = (cash_type: string, cash: number) => {
         if (totalInserted >= totalAmount) {
@@ -40,14 +41,14 @@ export default function PaymentModalComp({
 
         if (cash_type === 'BILL') {
             setBillReceived(prev => {
-                const key = `b${cash}`;
+                const key = `${cash_type}${cash}`;
                 return { ...prev, [key]: (prev[key] ?? 0) + 1 };
             });
         }
 
         if (cash_type === 'COIN') {
             setCoinReceived(prev => {
-                const key = `c${cash}`;
+                const key = `${cash_type}${cash}`;
                 return { ...prev, [key]: (prev[key] ?? 0) + 1 };
             });
         }

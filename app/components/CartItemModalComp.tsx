@@ -1,6 +1,7 @@
 import { Product } from '@/app/interface/Product';
 
-export default function CartItemsModalComp({ cart }: { cart: Product[] }) {
+export default function CartItemsModalComp({ cart, onUpdateQuantity }: { cart: Product[], onUpdateQuantity: (id: number, qty: number) => void }) {
+    
     return (
         <div>
             {cart.length === 0 ? (
@@ -34,7 +35,19 @@ export default function CartItemsModalComp({ cart }: { cart: Product[] }) {
                                     <span className="text-gray-600 ">{item.price} ฿</span>
                                 </div>
                                 <div className="flex-1">
+                                    <button
+                                        className="px-2 py-1 bg-red-500 text-white rounded mr-2 hover:cursor-pointer"
+                                        onClick={() => onUpdateQuantity(Number(item.id), (item.qty ?? 0) - 1)}
+                                    >
+                                        -
+                                    </button>
                                     <span className="text-gray-600">{item.qty}</span>
+                                    <button
+                                        className="px-2 py-1 bg-green-500 text-white rounded ml-2 hover:cursor-pointer"
+                                        onClick={() => onUpdateQuantity(Number(item.id), (item.qty ?? 0) + 1)}
+                                    >
+                                        +
+                                    </button>
                                 </div>
                                 <div>
                                     <span className="text-gray-600 font-semibold">{(item.qty ?? 0) * parseFloat(item.price)} ฿</span>
