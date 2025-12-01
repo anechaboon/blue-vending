@@ -202,7 +202,7 @@ export default function Home() {
                 <div className="flex justify-between gap-3">
                     <button
                         className="px-4 py-2 bg-gray-300 rounded hover:cursor-pointer"
-                        onClick={() => setOpenCheckoutModal(false)}
+                        onClick={() => closePaymentModal()}
                     >
                         Close
                     </button>
