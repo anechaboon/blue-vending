@@ -65,20 +65,35 @@ export default function PaymentModalComp({
                 <h4 className="text-2xl font-bold text-center">Insert Cash for </h4>
                 <h2 className="text-4xl font-semibold pl-3">{totalAmount} ฿</h2>
             </div>
-            <div className="flex flex-row items-center justify-center w-full mb-8 relative">
-                <h4 className="text-2xl font-bold text-center">Inserted</h4>
-                <h2 className="text-4xl font-semibold pl-3">{totalInserted} ฿</h2>
+                <div className="flex items-center justify-between w-full max-w-5xl mx-auto mb-8">
+                {/* ข้อความด้านซ้าย */}
+                <div className="flex items-center space-x-6">
+                    <div className="flex items-baseline space-x-2 mr-4">
+                    <h4 className="text-2xl font-bold">Inserted</h4>
+                    <h2 className="text-4xl font-semibold">{totalInserted} ฿</h2>
+                    </div>
+                    <div className="flex items-baseline space-x-2" style={{ marginLeft: '4rem' }}>
+                    <span className='text-1xl font-bold'>Left to Insert:</span>
+                    <span className="text-3xl font-semibold">
+                        {Math.max(0, totalAmount - totalInserted)} ฿
+                    </span>
+                    </div>
+                </div>
+
+                {/* ปุ่มด้านขวา */}
                 <button
-                    className="absolute right-0 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                    className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
                     onClick={() => {
-                        setBillReceived({});
-                        setCoinReceived({});
-                        setTotalInserted(0);
+                    setBillReceived({});
+                    setCoinReceived({});
+                    setTotalInserted(0);
                     }}
                 >
                     X
                 </button>
-            </div>
+                </div>
+
+
 
             <div className="mb-8">
                 <div className="grid grid-cols-2 gap-4">
