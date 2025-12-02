@@ -13,7 +13,6 @@ export default function EditProductModalComp({ selected, onChange }: Props) {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [imageError, setImageError] = useState(false);
   const BASE_URL_IMAGE = process.env.NEXT_PUBLIC_IMAGE_URL;
-
   function handlePreviewImage(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;

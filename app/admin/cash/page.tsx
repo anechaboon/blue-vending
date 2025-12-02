@@ -5,7 +5,6 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { getCashes, createCash, updateCash, deleteCash } from '@/services/cash';
 import CommonModal from '@/app/components/CommonModal';
 import EditCashModalComp from '@/app/components/EditCashModalComp';
-import { apiFetch } from '@/services/api';
 import Swal from 'sweetalert2';
 
 export interface Cash {

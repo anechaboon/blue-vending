@@ -31,7 +31,7 @@ export default function Products({ onClickProduct }: { onClickProduct: (p: Produ
         >
           <div
             id="image-preview"
-            className="w-full h-48 border border-gray-300 rounded bg-gray-100 bg-center bg-contain flex items-center justify-center"
+            className="w-full h-48 border border-gray-300 rounded bg-gray-100 flex items-center justify-center"
             >
             {!product.image ? (
               <span className="text-gray-400">Image not found</span>
@@ -39,7 +39,7 @@ export default function Products({ onClickProduct }: { onClickProduct: (p: Produ
               <img
                 src={`${BASE_URL_IMAGE}/products/${product.image}`}
                 alt={product.title}
-                className="w-full h-48 object-cover"
+                className="max-w-full max-h-full object-contain"
                 onError={(e) => {
                   const target = e.currentTarget;
                   target.style.display = 'none';
