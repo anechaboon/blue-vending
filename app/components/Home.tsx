@@ -84,14 +84,37 @@ export default function Home() {
                 return;
             }
 
-            Swal.fire('Success', 'Payment successful!', 'success').then(() => {
+            const messageLines = [];
+            let totalChange = 0;
+            if (response.change_bill) {
+                messageLines.push('Change Bills:');
+                for (const [key, value] of Object.entries(response.change_bill)) {
+                    totalChange += Number(key) * Number(value);
+                    messageLines.push(`- ${key}: ${value}`);
+                }
+            }
+            if (response.change_coin) {
+                messageLines.push('Change Coins:');
+                for (const [key, value] of Object.entries(response.change_coin)) {
+                    totalChange += Number(key) * Number(value);
+                    messageLines.push(`- ${key}: ${value}`);
+                }
+            }
+            messageLines.push('Total:' + ` ${totalChange} ฿`);
+
+            Swal.fire({
+                title: 'Success',
+                html: `<pre style="text-align: center;">${messageLines.join('\n')}</pre>`,
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
                 // Reset everything
                 setCart([]);
                 setBillReceived({});
                 setCoinReceived({});
                 setTotalInserted(0);
                 setOpenCheckoutModal(false);
-            });
+            }); 
         }).catch((error) => {
             console.log('Error:', error);
             Swal.fire('Error', 'An error occurred during payment', 'error');
