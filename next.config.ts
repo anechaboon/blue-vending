@@ -1,11 +1,10 @@
 import type { NextConfig } from "next";
-
 const nextConfig: NextConfig = {
-  /* config options here */
-  output: "export",
-  images: {
-    unoptimized: true
-  }
+  output: 'export',
+  images: { unoptimized: true },
+
+  basePath: '/blue-vending',        // ชื่อ repo ของคุณ
+  assetPrefix: '/blue-vending/',    // ชื่อ repo ของคุณ
 };
 
-export default nextConfig;
+module.exports = nextConfig;
