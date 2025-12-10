@@ -12,7 +12,7 @@ jobs:
         with:
           node-version: '24'    # เลือกเวอร์ชัน node ที่ใช้
       - run: npm install
-      - run: npm run build && npm run export
+      - run: npm run build
       - run: touch out/.nojekyll    # ป้องกัน Jekyll skip โฟลเดอร์ _next
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
