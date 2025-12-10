@@ -3,7 +3,7 @@ const BASE_API_URL = process.env.NEXT_PUBLIC_API_URL;
 export async function getCashes(queryStr: string = "") {
     const res = await fetch(`${BASE_API_URL}/cash` + queryStr, {
     method: "GET",
-    cache: "no-store",
+    cache: "no-store", // Ensure fresh data on each request
   });
 
   if (!res.ok) {

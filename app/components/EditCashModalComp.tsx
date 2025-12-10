@@ -11,8 +11,6 @@ interface Props {
 export default function EditProductModalComp({ selected, onChange }: Props) {
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Edit Cash</h2>
-
       <form>
         {/* Cash Type */}
         <div className="mb-4">

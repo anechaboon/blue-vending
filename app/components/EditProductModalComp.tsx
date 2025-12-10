@@ -32,8 +32,6 @@ export default function EditProductModalComp({ selected, onChange }: Props) {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Edit Product</h2>
-
       <form>
         {/* Title */}
         <div className="mb-4">

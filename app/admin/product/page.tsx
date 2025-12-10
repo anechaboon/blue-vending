@@ -185,6 +185,7 @@ export default function ProductsAdminPage() {
       />
       <CommonModal
         width="600px"
+        title={selectedProduct?.id === '' ? 'Add Product' : 'Edit Product'}
         open={openEditModal}
         onClose={() => setOpenEditModal(false)}
         footer={

@@ -189,6 +189,7 @@ export default function CashAdminPage() {
       />
       <CommonModal
         width="600px"
+        title={selectedCash?.id === '' ? 'Add Cash' : 'Edit Cash'}
         open={openEditModal}
         onClose={() => setOpenEditModal(false)}
         footer={
