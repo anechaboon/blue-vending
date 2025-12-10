@@ -27,9 +27,6 @@ jobs:
       - name: Build Next.js Application
         run: npm run build    # จะสร้างโฟลเดอร์ out ให้เอง
 
-      - name: Fix Jekyll for GitHub Pages
-        run: touch out/.nojekyll
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
