@@ -1,7 +1,7 @@
 1:"$Sreact.fragment"
-2:I[92825,["/_next/static/chunks/42879de7b8087bc9.js"],"ClientSegmentRoot"]
-3:I[8374,["/_next/static/chunks/1eda7a225c087c5b.js","/_next/static/chunks/cc0f4272c9fb2461.js"],"default"]
-4:I[39756,["/_next/static/chunks/42879de7b8087bc9.js"],"default"]
-5:I[37457,["/_next/static/chunks/42879de7b8087bc9.js"],"default"]
-0:{"buildId":"r1hIpDCykplQ7_j8rcif2","rsc":["$","$1","c",{"children":[[["$","script","script-0",{"src":"/_next/static/chunks/1eda7a225c087c5b.js","async":true}],["$","script","script-1",{"src":"/_next/static/chunks/cc0f4272c9fb2461.js","async":true}]],["$","$L2",null,{"Component":"$3","slots":{"children":["$","$L4",null,{"parallelRouterKey":"children","template":["$","$L5",null,{}]}]},"serverProvidedParams":{"params":{},"promises":["$@6"]}}]]}],"loading":null,"isPartial":false}
+2:I[92825,["/blue-vending/_next/static/chunks/42879de7b8087bc9.js"],"ClientSegmentRoot"]
+3:I[8374,["/blue-vending/_next/static/chunks/1eda7a225c087c5b.js","/blue-vending/_next/static/chunks/cc0f4272c9fb2461.js"],"default"]
+4:I[39756,["/blue-vending/_next/static/chunks/42879de7b8087bc9.js"],"default"]
+5:I[37457,["/blue-vending/_next/static/chunks/42879de7b8087bc9.js"],"default"]
+0:{"buildId":"nHgdxwoxshy0ktiZiRoGR","rsc":["$","$1","c",{"children":[[["$","script","script-0",{"src":"/blue-vending/_next/static/chunks/1eda7a225c087c5b.js","async":true}],["$","script","script-1",{"src":"/blue-vending/_next/static/chunks/cc0f4272c9fb2461.js","async":true}]],["$","$L2",null,{"Component":"$3","slots":{"children":["$","$L4",null,{"parallelRouterKey":"children","template":["$","$L5",null,{}]}]},"serverProvidedParams":{"params":{},"promises":["$@6"]}}]]}],"loading":null,"isPartial":false}
 6:"$0:rsc:props:children:1:props:serverProvidedParams:params"
